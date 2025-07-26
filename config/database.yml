@@ -1,0 +1,35 @@
+#Database configurations
+
+#docker run --name pg -e POSTGRES_PASSWORD=yourpassword -p 5432:5432 -d postgres
+
+# PostgreSQL. Versions 9.3 and up are supported.
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+
+development:
+  <<: *default
+  database: dependent_select_development
+  host: localhost
+  port: 5432
+  username: postgres
+  password: yourpassword
+
+test:
+  <<: *default
+  database: dependent_select_test
+  host: localhost
+  port: 5432
+  username: postgres
+  password: yourpassword
+
+production:
+  <<: *default
+  database: dependent_select_production
+  username: house2
+  password: <%= ENV["HOUSE2_DATABASE_PASSWORD"] %>
