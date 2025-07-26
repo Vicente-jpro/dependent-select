@@ -1,0 +1,8 @@
+<h1>City#index</h1>
+<p>Find me in app/views/city/index.html.erb</p>
+
+<%= form_with url: country_provinces_path, method: :get, local: true, html: { id: "country-form" } do |form| %>
+  <%= form.label :city_id, "Select city" %>
+  <%= form.collection_select :city_id,  @cities, :id, :name_city, { prompt: "Choose a city" }, { onchange: "this.form.submit();" } %>
+<% end %>
+
