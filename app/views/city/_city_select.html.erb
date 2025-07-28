@@ -1,0 +1,6 @@
+<%= form_with model: city, url: city_index_path, method: :post do |form| %>
+  <%= form.label :name_city, "City Name" %>
+  <%= form.text_field :name_city %>
+  <%= form.hidden_field :province_id, value: province_id %>
+  <%= form.submit "Create City" %>
+<% end %>
