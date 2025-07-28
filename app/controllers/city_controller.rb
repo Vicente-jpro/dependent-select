@@ -1,6 +1,10 @@
-class CityController < ApplicationController
+class CitiesController < ApplicationController
   def index
     @cities = City.where(province_id: params[:province_id])
+    respond_to do |format|
+      format.html
+      format.json { render json: @cities.select(:id, :name_city) }
+    end
   end
 
   def create

@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   get "province/cities", to: "province#cities", as: :province_cities
   get "province/index", to: "province#index", as: :province_index
 
+  resources :provinces, only: [ :index ]
+  resources :cities, only: [ :index ]
+
   get "home/index"
 
   get "up" => "rails/health#show", as: :rails_health_check

@@ -1,5 +1,6 @@
 class CountryController < ApplicationController
   def provinces
-     redirect_to province_index_path(country_id: params[:country_id])
+    @provinces = Province.where(country_id: params[:country_id])
+    render partial: "province/province_select", locals: { provinces: @provinces }
   end
 end

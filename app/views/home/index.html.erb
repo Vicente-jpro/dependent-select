@@ -1,7 +1,72 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
 
-<%= form_with url: country_provinces_path, method: :get, local: true, html: { id: "country-form" } do |form| %>
-  <%= form.label :country_id, "Select Country" %>
-  <%= form.collection_select :country_id, Country.all, :id, :name_country, { prompt: "Choose a country" }, { onchange: "this.form.submit();" } %>
-<% end %>
+<h1>Single Page Selects</h1>
+
+<form id="location-form">
+  <label for="country-select">Country:</label>
+  <select id="country-select" name="country_id">
+    <option value="">Choose a country</option>
+    <% Country.all.each do |country| %>
+      <option value="<%= country.id %>"><%= country.name_country %></option>
+    <% end %>
+  </select>
+
+  <label for="province-select">Province:</label>
+  <select id="province-select" name="province_id" disabled>
+    <option value="">Choose a province</option>
+  </select>
+
+  <label for="city-select">City:</label>
+  <select id="city-select" name="city_id" disabled>
+    <option value="">Choose a city</option>
+  </select>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const countrySelect = document.getElementById('country-select');
+  const provinceSelect = document.getElementById('province-select');
+  const citySelect = document.getElementById('city-select');
+
+  countrySelect.addEventListener('change', function() {
+    const countryId = this.value;
+    provinceSelect.innerHTML = '<option value="">Choose a province</option>';
+    citySelect.innerHTML = '<option value="">Choose a city</option>';
+    citySelect.disabled = true;
+    if (countryId) {
+      fetch(`/provinces.json?country_id=${countryId}`)
+        .then(response => response.json())
+        .then(data => {
+          provinceSelect.disabled = false;
+          data.forEach(function(province) {
+            const option = document.createElement('option');
+            option.value = province.id;
+            option.textContent = province.name_province;
+            provinceSelect.appendChild(option);
+          });
+        });
+    } else {
+      provinceSelect.disabled = true;
+    }
+  });
+
+  provinceSelect.addEventListener('change', function() {
+    const provinceId = this.value;
+    citySelect.innerHTML = '<option value="">Choose a city</option>';
+    if (provinceId) {
+      fetch(`/cities.json?province_id=${provinceId}`)
+        .then(response => response.json())
+        .then(data => {
+          citySelect.disabled = false;
+          data.forEach(function(city) {
+            const option = document.createElement('option');
+            option.value = city.id;
+            option.textContent = city.name_city;
+            citySelect.appendChild(option);
+          });
+        });
+    } else {
+      citySelect.disabled = true;
+    }
+  });
+});
+</script>
